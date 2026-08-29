@@ -13,7 +13,7 @@ export const doctor: DoctorProfile = {
   professionalMemberships: [],
   shortBio:
     "মনোযোগী পরামর্শ, স্পষ্ট যোগাযোগ এবং দীর্ঘমেয়াদি সুস্থতার প্রতি গুরুত্ব দিয়ে রোগীকেন্দ্রিক চিকিৎসাসেবা প্রদান করেন।",
-  profileImage: "/images/doctor/doctor-profile.webp",
+  profileImage: "/images/doctor/doctor-profile.png",
   phone: "+8801794908771",
   whatsapp: "8801794908771",
 };
