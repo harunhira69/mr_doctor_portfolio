@@ -62,3 +62,11 @@ export type SiteConfig = {
     linkedin?: string;
   };
 };
+
+export type ExperienceItem = {
+  id: string;
+  period: string;
+  title: string;
+  organization: string;
+  description: string;
+};

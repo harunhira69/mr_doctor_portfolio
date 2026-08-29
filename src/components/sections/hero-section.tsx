@@ -8,7 +8,6 @@ import {
   Clock3,
   MapPin,
   MessageCircle,
-  Stethoscope,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
