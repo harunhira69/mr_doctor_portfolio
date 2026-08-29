@@ -128,3 +128,35 @@
     @apply font-sans;
   }
 }
+
+:root {
+  --medical-navy: #0c2d35;
+  --medical-teal: #0e6b65;
+  --medical-teal-dark: #09534f;
+  --medical-mint: #ddf1ec;
+  --medical-surface: #f8fbfa;
+  --medical-gold: #c79b4b;
+  --medical-text: #18343a;
+  --medical-muted: #61777b;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--medical-surface);
+  color: var(--medical-text);
+  font-family: var(--font-bangla), Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--medical-mint);
+  color: var(--medical-navy);
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
