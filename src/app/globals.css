@@ -160,3 +160,38 @@ a,
 button {
   -webkit-tap-highlight-color: transparent;
 }
+
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #bfe5dc;
+  color: #0c2d35;
+}
+
+:focus-visible {
+  outline: 3px solid #0e6b65;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
