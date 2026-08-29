@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  ArrowUpRight,
   MapPin,
   MessageCircle,
   Phone,
@@ -8,101 +9,152 @@ import {
 
 import { Container } from "@/components/shared/container";
 import { navigationItems } from "@/config/navigation";
-import { siteConfig } from "@/config/site";
 import { chambers } from "@/content/chambers";
-import { createGeneralWhatsAppUrl } from "@/lib/whatsapp";
+import { doctor } from "@/content/doctor";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const whatsappUrl = createGeneralWhatsAppUrl();
-  const primaryChamber = chambers[0];
+
+  const whatsappMessage = encodeURIComponent(
+    `আসসালামু আলাইকুম, আমি ${doctor.fullName}-এর অ্যাপয়েন্টমেন্ট সম্পর্কে জানতে চাই।`,
+  );
+
+  const whatsappUrl = `https://wa.me/${doctor.whatsapp}?text=${whatsappMessage}`;
 
   return (
-    <footer className="bg-[#0C2D35] pb-24 pt-16 text-white md:pb-8">
+    <footer className="bg-[#081F25] text-white">
       <Container>
-        <div className="grid gap-12 border-b border-white/10 pb-12 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-12 py-16 sm:py-20 md:grid-cols-2 lg:grid-cols-[1.25fr_0.75fr_1fr]">
           <div>
-            <div className="mb-5 flex items-center gap-3">
-              <span className="flex size-11 items-center justify-center rounded-2xl bg-white/10">
-                <Stethoscope className="size-5" aria-hidden="true" />
+            <Link href="/" className="inline-flex items-center gap-3">
+              <span className="flex size-12 items-center justify-center rounded-2xl bg-[#0E6B65] text-white">
+                <Stethoscope className="size-6" aria-hidden="true" />
               </span>
 
-              <div>
-                <p className="text-xl font-bold">{siteConfig.name}</p>
-                <p className="text-sm text-white/60">
-                  মেডিসিন ও ডায়াবেটিস বিশেষজ্ঞ
-                </p>
-              </div>
-            </div>
+              <span>
+                <span className="block text-lg font-bold">
+                  {doctor.fullName}
+                </span>
 
-            <p className="max-w-sm text-sm leading-7 text-white/65">
-              রোগীর কথা মনোযোগ দিয়ে শোনা, সহজভাবে বোঝানো এবং দীর্ঘমেয়াদি
-              সুস্থতার প্রতি গুরুত্ব দেওয়াই আমাদের সেবার মূল লক্ষ্য।
+                <span className="mt-1 block text-sm text-white/55">
+                  {doctor.specialty}
+                </span>
+              </span>
+            </Link>
+
+            <p className="mt-6 max-w-md text-sm leading-7 text-white/60">
+              রোগীকেন্দ্রিক চিকিৎসা পরামর্শ, চেম্বারের সময়সূচি এবং
+              WhatsApp-এর মাধ্যমে সহজ appointment request।
             </p>
-          </div>
 
-          <div>
-            <h2 className="mb-5 font-semibold text-white">প্রয়োজনীয় লিংক</h2>
+            {doctor.bmdcRegistration && (
+              <p className="mt-4 text-sm font-semibold text-[#8FD8CF]">
+                BMDC রেজিস্ট্রেশন: {doctor.bmdcRegistration}
+              </p>
+            )}
 
-            <nav className="grid grid-cols-2 gap-3">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-sm text-white/65 transition hover:text-white"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          <div>
-            <h2 className="mb-5 font-semibold text-white">যোগাযোগ</h2>
-
-            <div className="space-y-4 text-sm text-white/65">
+            <div className="mt-7 flex flex-wrap gap-3">
               <a
-                href={`tel:${siteConfig.phone}`}
-                className="flex items-start gap-3 transition hover:text-white"
+                href={`tel:${doctor.phone}`}
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 px-4 text-sm font-semibold text-white transition hover:border-[#8FD8CF] hover:text-[#8FD8CF]"
               >
-                <Phone className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-                <span>{siteConfig.phone}</span>
+                <Phone className="size-4" aria-hidden="true" />
+                ফোন করুন
               </a>
 
               <a
                 href={whatsappUrl}
                 target="_blank"
-                rel="noreferrer"
-                className="flex items-start gap-3 transition hover:text-white"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0E6B65] px-4 text-sm font-semibold text-white transition hover:bg-[#117C75]"
               >
-                <MessageCircle
-                  className="mt-0.5 size-4 shrink-0"
-                  aria-hidden="true"
-                />
-                <span>WhatsApp-এ যোগাযোগ করুন</span>
+                <MessageCircle className="size-4" aria-hidden="true" />
+                WhatsApp
               </a>
+            </div>
+          </div>
 
-              {primaryChamber && (
-                <div className="flex items-start gap-3">
-                  <MapPin
-                    className="mt-0.5 size-4 shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span>{primaryChamber.address}</span>
+          <div>
+            <h2 className="font-bold text-white">দ্রুত লিংক</h2>
+
+            <nav className="mt-5" aria-label="Footer navigation">
+              <ul className="space-y-3">
+                {navigationItems.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="inline-flex items-center gap-2 text-sm text-white/60 transition hover:text-[#8FD8CF]"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+
+                <li>
+                  <Link
+                    href="/privacy"
+                    className="inline-flex items-center gap-2 text-sm text-white/60 transition hover:text-[#8FD8CF]"
+                  >
+                    গোপনীয়তা নীতি
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-white">চেম্বার</h2>
+
+            <div className="mt-5 space-y-5">
+              {chambers.slice(0, 2).map((chamber) => (
+                <div key={chamber.id}>
+                  <div className="flex items-start gap-3">
+                    <MapPin
+                      className="mt-0.5 size-4 shrink-0 text-[#8FD8CF]"
+                      aria-hidden="true"
+                    />
+
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        {chamber.name}
+                      </p>
+
+                      <p className="mt-1 text-sm leading-6 text-white/55">
+                        {chamber.address}
+                      </p>
+
+                      {chamber.mapUrl && (
+                        <a
+                          href={chamber.mapUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[#8FD8CF] hover:text-white"
+                        >
+                          ম্যাপে দেখুন
+                          <ArrowUpRight
+                            className="size-3.5"
+                            aria-hidden="true"
+                          />
+                        </a>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              )}
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 pt-7 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {currentYear} {siteConfig.name}। সর্বস্বত্ব সংরক্ষিত।
-          </p>
+        <div className="border-t border-white/10 py-6">
+          <div className="flex flex-col gap-4 text-sm text-white/45 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              © {currentYear} {doctor.fullName}। সর্বস্বত্ব সংরক্ষিত।
+            </p>
 
-          <Link href="/privacy" className="transition hover:text-white">
-            গোপনীয়তা নীতি
-          </Link>
+            <p>
+              এটি জরুরি চিকিৎসাসেবার website নয়।
+            </p>
+          </div>
         </div>
       </Container>
     </footer>

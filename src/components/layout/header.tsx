@@ -1,7 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Menu, MessageCircle, Stethoscope } from "lucide-react";
+import { usePathname } from "next/navigation";
+import {
+  Menu,
+  MessageCircle,
+  Phone,
+  Stethoscope,
+} from "lucide-react";
 
 import { Container } from "@/components/shared/container";
 import {
@@ -13,112 +20,199 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { navigationItems } from "@/config/navigation";
-import { siteConfig } from "@/config/site";
-import { createGeneralWhatsAppUrl } from "@/lib/whatsapp";
+import { doctor } from "@/content/doctor";
 
 export function Header() {
-  const whatsappUrl = createGeneralWhatsAppUrl();
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const appointmentMessage = encodeURIComponent(
+    `আসসালামু আলাইকুম, আমি ${doctor.fullName}-এর অ্যাপয়েন্টমেন্ট নিতে চাই।`,
+  );
+
+  const whatsappUrl = `https://wa.me/${doctor.whatsapp}?text=${appointmentMessage}`;
+
+  function isActiveLink(href: string) {
+    if (href === "/") {
+      return pathname === "/";
+    }
+
+    return pathname.startsWith(href);
+  }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#0C2D35]/10 bg-[#F8FBFA]/95 backdrop-blur-xl">
-      <Container className="flex h-20 items-center justify-between">
-        <Link
-          href="/"
-          className="group flex items-center gap-3"
-          aria-label="হোম পেজে যান"
-        >
-          <span className="flex size-11 items-center justify-center rounded-2xl bg-[#0C2D35] text-white transition-transform duration-300 group-hover:-rotate-3">
-            <Stethoscope className="size-5" aria-hidden="true" />
-          </span>
-
-          <span>
-            <span className="block text-lg font-bold leading-tight text-[#0C2D35]">
-              {siteConfig.name}
-            </span>
-            <span className="block text-xs font-medium text-[#61777B]">
-              মেডিসিন ও ডায়াবেটিস বিশেষজ্ঞ
-            </span>
-          </span>
-        </Link>
-
-        <nav
-          className="hidden items-center gap-7 lg:flex"
-          aria-label="প্রধান নেভিগেশন"
-        >
-          {navigationItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-semibold text-[#18343A] transition-colors hover:text-[#0E6B65]"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden lg:block">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#0E6B65] px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#09534F] hover:shadow-md"
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-[#0C2D35]/10 bg-white/90 backdrop-blur-xl">
+      <Container>
+        <div className="flex h-20 items-center justify-between gap-5">
+          <Link
+            href="/"
+            className="flex min-w-0 items-center gap-3"
+            aria-label={`${doctor.fullName} - হোম`}
           >
-            <MessageCircle className="size-4" aria-hidden="true" />
-            অ্যাপয়েন্টমেন্ট নিন
-          </a>
-        </div>
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#0C2D35] text-white shadow-md">
+              <Stethoscope className="size-6" aria-hidden="true" />
+            </span>
 
-        <div className="lg:hidden">
-          <Sheet>
-            <SheetTrigger
-              aria-label="মোবাইল মেনু খুলুন"
-              className="inline-flex size-11 items-center justify-center rounded-full border border-[#0C2D35]/15 bg-white text-[#0C2D35] transition hover:bg-[#DDF1EC]"
-            >
-              <Menu className="size-5" aria-hidden="true" />
-            </SheetTrigger>
+            <span className="hidden min-w-0 sm:block">
+              <span className="block truncate text-base font-bold text-[#0C2D35]">
+                {doctor.fullName}
+              </span>
 
-            <SheetContent
-              side="right"
-              className="w-[88%] border-[#0C2D35]/10 bg-[#F8FBFA] sm:max-w-sm"
-            >
-              <SheetHeader className="border-b border-[#0C2D35]/10">
-                <SheetTitle className="text-left text-xl text-[#0C2D35]">
-                  {siteConfig.name}
-                </SheetTitle>
+              <span className="mt-0.5 block truncate text-xs font-medium text-[#61777B]">
+                {doctor.specialty}
+              </span>
+            </span>
+          </Link>
 
-                <SheetDescription className="text-left">
-                  প্রয়োজনীয় তথ্য দেখুন অথবা সরাসরি অ্যাপয়েন্টমেন্ট নিন।
-                </SheetDescription>
-              </SheetHeader>
+          <nav
+            className="hidden items-center gap-1 lg:flex"
+            aria-label="প্রধান নেভিগেশন"
+          >
+            {navigationItems.map((item) => {
+              const active = isActiveLink(item.href);
 
-              <nav
-                className="flex flex-col gap-2 px-4 py-6"
-                aria-label="মোবাইল নেভিগেশন"
-              >
-                {navigationItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="rounded-xl px-4 py-3 text-base font-semibold text-[#18343A] transition hover:bg-[#DDF1EC] hover:text-[#0E6B65]"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="px-4">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#0E6B65] px-5 font-semibold text-white transition hover:bg-[#09534F]"
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`rounded-full px-4 py-2.5 text-sm font-semibold transition ${
+                    active
+                      ? "bg-[#DDF1EC] text-[#0E6B65]"
+                      : "text-[#31565B] hover:bg-[#F4FAF8] hover:text-[#0E6B65]"
+                  }`}
                 >
-                  <MessageCircle className="size-5" aria-hidden="true" />
-                  WhatsApp-এ অ্যাপয়েন্টমেন্ট
-                </a>
-              </div>
-            </SheetContent>
-          </Sheet>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="hidden items-center gap-3 lg:flex">
+            <a
+              href={`tel:${doctor.phone}`}
+              aria-label={`ফোন করুন ${doctor.phone}`}
+              className="flex size-11 items-center justify-center rounded-full border border-[#0C2D35]/15 text-[#0C2D35] transition hover:border-[#0E6B65] hover:text-[#0E6B65]"
+            >
+              <Phone className="size-5" aria-hidden="true" />
+            </a>
+
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0E6B65] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#09534F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E6B65] focus-visible:ring-offset-2"
+            >
+              <MessageCircle className="size-5" aria-hidden="true" />
+              অ্যাপয়েন্টমেন্ট
+            </a>
+          </div>
+
+          <div className="lg:hidden">
+            <Sheet
+              open={mobileMenuOpen}
+              onOpenChange={setMobileMenuOpen}
+            >
+              <SheetTrigger
+                aria-label="Menu খুলুন"
+                className="flex size-11 items-center justify-center rounded-full border border-[#0C2D35]/15 bg-white text-[#0C2D35] transition hover:border-[#0E6B65] hover:text-[#0E6B65]"
+              >
+                <Menu className="size-5" aria-hidden="true" />
+              </SheetTrigger>
+
+              <SheetContent
+                side="right"
+                className="w-[min(88vw,380px)] border-l border-[#0C2D35]/10 bg-white p-0"
+              >
+                <SheetHeader className="border-b border-[#0C2D35]/10 p-6 text-left">
+                  <SheetTitle className="flex items-center gap-3 text-left">
+                    <span className="flex size-11 items-center justify-center rounded-2xl bg-[#0C2D35] text-white">
+                      <Stethoscope
+                        className="size-6"
+                        aria-hidden="true"
+                      />
+                    </span>
+
+                    <span>
+                      <span className="block text-base font-bold text-[#0C2D35]">
+                        {doctor.fullName}
+                      </span>
+
+                      <span className="mt-0.5 block text-xs font-medium text-[#61777B]">
+                        {doctor.specialty}
+                      </span>
+                    </span>
+                  </SheetTitle>
+
+                  <SheetDescription className="sr-only">
+                    Website-এর বিভিন্ন page-এ যাওয়ার navigation menu।
+                  </SheetDescription>
+                </SheetHeader>
+
+                <nav
+                  className="p-5"
+                  aria-label="Mobile navigation"
+                >
+                  <ul className="space-y-2">
+                    {navigationItems.map((item) => {
+                      const active = isActiveLink(item.href);
+
+                      return (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            aria-current={active ? "page" : undefined}
+                            className={`flex min-h-12 items-center rounded-2xl px-4 font-semibold transition ${
+                              active
+                                ? "bg-[#DDF1EC] text-[#0E6B65]"
+                                : "text-[#31565B] hover:bg-[#F4FAF8] hover:text-[#0E6B65]"
+                            }`}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
+
+                    <li>
+                      <Link
+                        href="/privacy"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex min-h-12 items-center rounded-2xl px-4 font-semibold text-[#31565B] transition hover:bg-[#F4FAF8] hover:text-[#0E6B65]"
+                      >
+                        গোপনীয়তা নীতি
+                      </Link>
+                    </li>
+                  </ul>
+                </nav>
+
+                <div className="mt-auto border-t border-[#0C2D35]/10 p-5">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#0E6B65] px-5 font-bold text-white transition hover:bg-[#09534F]"
+                  >
+                    <MessageCircle
+                      className="size-5"
+                      aria-hidden="true"
+                    />
+                    WhatsApp অ্যাপয়েন্টমেন্ট
+                  </a>
+
+                  <a
+                    href={`tel:${doctor.phone}`}
+                    className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[#0C2D35]/15 px-5 font-bold text-[#0C2D35]"
+                  >
+                    <Phone className="size-5" aria-hidden="true" />
+                    {doctor.phone}
+                  </a>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </Container>
     </header>
