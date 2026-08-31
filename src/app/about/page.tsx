@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 
 import { AboutSection } from "@/components/sections/about-section";
-import { ConsultationGuide } from "@/components/sections/consultation-guide";
-import { ExperienceSection } from "@/components/sections/experience-section";
+import { AppointmentCta } from "@/components/sections/appointment-cta";
 import { PageHero } from "@/components/shared/page-hero";
+import { doctor } from "@/content/doctor";
 
 export const metadata: Metadata = {
-  title: "চিকিৎসক পরিচিতি",
-  description:
-    "চিকিৎসকের শিক্ষাগত যোগ্যতা, পেশাগত অভিজ্ঞতা, বিশেষজ্ঞ ক্ষেত্র এবং চিকিৎসাসেবার মূলনীতি সম্পর্কে বিস্তারিত জানুন।",
+  title: `${doctor.fullName} — চিকিৎসক পরিচিতি`,
+  description: `${doctor.fullName}-এর পেশাগত পরিচয়, যোগ্যতা, বিশেষজ্ঞ ক্ষেত্র এবং রোগীসেবার দৃষ্টিভঙ্গি সম্পর্কে বিস্তারিত জানুন।`,
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {
@@ -16,14 +18,13 @@ export default function AboutPage() {
     <>
       <PageHero
         eyebrow="চিকিৎসক পরিচিতি"
-        title="যোগ্যতা, অভিজ্ঞতা ও রোগীকেন্দ্রিক চিকিৎসাসেবা"
-        description="চিকিৎসকের শিক্ষাগত যোগ্যতা, পেশাগত পরিচিতি, অভিজ্ঞতা এবং চিকিৎসাসেবার মূলনীতি সম্পর্কে জানুন।"
+        title={doctor.fullName}
+        description={`${doctor.designation} • ${doctor.specialty}`}
         currentPage="পরিচিতি"
       />
 
       <AboutSection showDetailsLink={false} />
-      <ExperienceSection />
-      <ConsultationGuide />
+      <AppointmentCta />
     </>
   );
 }

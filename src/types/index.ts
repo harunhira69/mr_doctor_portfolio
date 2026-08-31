@@ -6,6 +6,7 @@ export type DoctorProfile = {
   organization: string;
   yearsOfExperience: number;
   bmdcRegistration?: string;
+  demoBmdcRegistration?: string;
   professionalMemberships: string[];
   shortBio: string;
   profileImage: string;

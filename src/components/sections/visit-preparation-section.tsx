@@ -156,7 +156,7 @@ export function VisitPreparationSection() {
               className="h-px w-9 bg-clinical-gold"
               aria-hidden="true"
             />
-            Appointment preparation
+         সাক্ষাতের প্রস্তুতি
             <span
               className="h-px w-9 bg-clinical-gold"
               aria-hidden="true"

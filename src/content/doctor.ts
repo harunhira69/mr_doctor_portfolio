@@ -2,19 +2,36 @@ import type { DoctorProfile } from "@/types";
 
 /**
  * DEMO CONTENT
- * Production launch-এর আগে client-এর verified তথ্য দিয়ে replace করতে হবে।
+ *
+ * Production launch-এর আগে client-এর verified information দিয়ে
+ * degree, designation, organization, experience, memberships,
+ * BMDC registration এবং contact details replace করতে হবে।
  */
 
 export const doctor: DoctorProfile = {
   fullName: "ডা. আরাফ মাহমুদ",
+
   specialty: "মেডিসিন ও ডায়াবেটিস বিশেষজ্ঞ",
+
   degrees: ["MBBS", "FCPS (Medicine)"],
+
   designation: "কনসালট্যান্ট ফিজিশিয়ান",
+
   organization: "প্রাইমকেয়ার মেডিকেল সেন্টার, ঢাকা",
+
   yearsOfExperience: 12,
 
-  // Verification ছাড়া BMDC number ব্যবহার করা হবে না।
+  /**
+   * এখানে শুধু verified BMDC number থাকবে।
+   * Physician JSON-LD এই field ব্যবহার করতে পারবে।
+   */
   bmdcRegistration: "",
+
+  /**
+   * শুধু development/demo UI-এর জন্য।
+   * Structured data-তে ব্যবহার করা যাবে না।
+   */
+  demoBmdcRegistration: "DEMO-A-000000",
 
   professionalMemberships: [
     "বাংলাদেশ সোসাইটি অব মেডিসিন",
@@ -25,6 +42,8 @@ export const doctor: DoctorProfile = {
     "মেডিসিন ও ডায়াবেটিস চিকিৎসায় অভিজ্ঞ ডা. আরাফ মাহমুদ রোগীর সমস্যা মনোযোগ দিয়ে শোনা, সহজ ভাষায় চিকিৎসা পরিকল্পনা ব্যাখ্যা করা এবং দীর্ঘমেয়াদি স্বাস্থ্য ব্যবস্থাপনায় গুরুত্ব দিয়ে থাকেন।",
 
   profileImage: "/images/doctor/doctor-profile.webp",
+
   phone: "+8801794908771",
+
   whatsapp: "8801794908771",
 };

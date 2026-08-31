@@ -272,14 +272,14 @@ export function ConcernNavigatorSection() {
                   </p>
 
                   <a
-                    href="tel:999"
+                    href="tel:333"
                     className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-clinical-critical px-5 font-bold text-white transition hover:bg-[#8F2E2E]"
                   >
                     <ShieldAlert
                       className="size-4"
                       aria-hidden="true"
                     />
-                    জাতীয় জরুরি সেবা ৯৯৯
+                    জাতীয় জরুরি সেবা 333
                   </a>
                 </div>
               </div>

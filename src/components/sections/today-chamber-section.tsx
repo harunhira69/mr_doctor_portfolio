@@ -351,8 +351,7 @@ export function TodayChamberSection() {
             </Link>
 
             <p className="mt-8 border-l-2 border-clinical-gold pl-4 text-xs leading-6 text-white/55">
-              এটি ডেমো সময়সূচি। Production launch-এর আগে চিকিৎসকের
-              verified chamber information দিয়ে পরিবর্তন করতে হবে।
+             চেম্বারের সময়সূচি পরিবর্তিত হতে পারে। যাওয়ার আগে ফোন অথবা WhatsApp-এর মাধ্যমে সময় নিশ্চিত করে নিন।
             </p>
           </div>
 
