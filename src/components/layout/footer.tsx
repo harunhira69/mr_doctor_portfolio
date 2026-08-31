@@ -146,7 +146,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-white/10 py-6">
-          <div className="flex flex-col gap-4 text-sm text-white/45 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 text-sm text-white/65 sm:flex-row sm:items-center sm:justify-between">
             <p>
               © {currentYear} {doctor.fullName}। সর্বস্বত্ব সংরক্ষিত।
             </p>

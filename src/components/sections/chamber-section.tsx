@@ -60,7 +60,11 @@ export function ChamberSection() {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {chambers.map((chamber, index) => (
-            <Reveal key={chamber.id} delay={index * 0.1}>
+            <Reveal
+              key={chamber.id}
+              delay={index * 0.1}
+              className="h-full"
+            >
               <article className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#0C2D35]/10 bg-[#F8FBFA] shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#0E6B65]/20 hover:shadow-xl">
                 <div className="border-b border-[#0C2D35]/10 bg-[#0C2D35] p-7 text-white sm:p-8">
                   <div className="flex items-start gap-4">
@@ -85,58 +89,59 @@ export function ChamberSection() {
                 </div>
 
                 <div className="flex flex-1 flex-col p-7 sm:p-8">
-                  <dl className="space-y-5">
-                    <div className="flex gap-4">
-                      <CalendarDays
-                        className="mt-1 size-5 shrink-0 text-[#0E6B65]"
-                        aria-hidden="true"
-                      />
+                  <dl
+                    className="space-y-5"
+                    aria-label={`${chamber.name} চেম্বারের তথ্য`}
+                  >
+                    <div>
+                      <dt className="flex items-start gap-4 text-sm font-semibold text-[#496469]">
+                        <CalendarDays
+                          className="mt-0.5 size-5 shrink-0 text-[#0E6B65]"
+                          aria-hidden="true"
+                        />
 
-                      <div>
-                        <dt className="text-sm font-semibold text-[#61777B]">
-                          রোগী দেখার দিন
-                        </dt>
-                        <dd className="mt-1 font-bold text-[#0C2D35]">
-                          {chamber.visitingDays}
-                        </dd>
-                      </div>
+                        <span>রোগী দেখার দিন</span>
+                      </dt>
+
+                      <dd className="ml-9 mt-1 font-bold text-[#0C2D35]">
+                        {chamber.visitingDays}
+                      </dd>
                     </div>
 
-                    <div className="flex gap-4">
-                      <Clock3
-                        className="mt-1 size-5 shrink-0 text-[#0E6B65]"
-                        aria-hidden="true"
-                      />
+                    <div>
+                      <dt className="flex items-start gap-4 text-sm font-semibold text-[#496469]">
+                        <Clock3
+                          className="mt-0.5 size-5 shrink-0 text-[#0E6B65]"
+                          aria-hidden="true"
+                        />
 
-                      <div>
-                        <dt className="text-sm font-semibold text-[#61777B]">
-                          সময়
-                        </dt>
-                        <dd className="mt-1 font-bold text-[#0C2D35]">
-                          {chamber.visitingHours}
-                        </dd>
-                      </div>
+                        <span>সময়</span>
+                      </dt>
+
+                      <dd className="ml-9 mt-1 font-bold text-[#0C2D35]">
+                        {chamber.visitingHours}
+                      </dd>
                     </div>
 
-                    <div className="flex gap-4">
-                      <Phone
-                        className="mt-1 size-5 shrink-0 text-[#0E6B65]"
-                        aria-hidden="true"
-                      />
+                    <div>
+                      <dt className="flex items-start gap-4 text-sm font-semibold text-[#496469]">
+                        <Phone
+                          className="mt-0.5 size-5 shrink-0 text-[#0E6B65]"
+                          aria-hidden="true"
+                        />
 
-                      <div>
-                        <dt className="text-sm font-semibold text-[#61777B]">
-                          অ্যাপয়েন্টমেন্ট
-                        </dt>
-                        <dd className="mt-1">
-                          <a
-                            href={`tel:${chamber.appointmentNumber}`}
-                            className="font-bold text-[#0C2D35] transition hover:text-[#0E6B65]"
-                          >
-                            {chamber.appointmentNumber}
-                          </a>
-                        </dd>
-                      </div>
+                        <span>অ্যাপয়েন্টমেন্ট</span>
+                      </dt>
+
+                      <dd className="ml-9 mt-1">
+                        <a
+                          href={`tel:${chamber.appointmentNumber}`}
+                          className="font-bold text-[#0C2D35] transition hover:text-[#0E6B65]"
+                          aria-label={`${chamber.name} চেম্বারে ফোন করুন ${chamber.appointmentNumber}`}
+                        >
+                          {chamber.appointmentNumber}
+                        </a>
+                      </dd>
                     </div>
                   </dl>
 
