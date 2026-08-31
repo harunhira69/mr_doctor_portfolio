@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { AboutSection } from "@/components/sections/about-section";
-import { AppointmentCta } from "@/components/sections/appointment-cta";
+import { ConsultationGuide } from "@/components/sections/consultation-guide";
 import { ExperienceSection } from "@/components/sections/experience-section";
 import { PageHero } from "@/components/shared/page-hero";
 
@@ -23,7 +23,7 @@ export default function AboutPage() {
 
       <AboutSection showDetailsLink={false} />
       <ExperienceSection />
-      <AppointmentCta />
+      <ConsultationGuide />
     </>
   );
 }

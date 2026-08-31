@@ -2,21 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowUpRight,
-  CalendarDays,
-  Clock3,
   MapPin,
   MessageCircle,
   ShieldCheck,
 } from "lucide-react";
 
 import { Container } from "@/components/shared/container";
-import { chambers } from "@/content/chambers";
 import { doctor } from "@/content/doctor";
 import { createGeneralWhatsAppUrl } from "@/lib/whatsapp";
 
 export function HeroSection() {
   const whatsappUrl = createGeneralWhatsAppUrl();
-  const primaryChamber = chambers[0];
 
   const experience = new Intl.NumberFormat("bn-BD").format(
     doctor.yearsOfExperience,
@@ -119,7 +115,7 @@ export function HeroSection() {
                 className="size-4.5 text-clinical-teal"
                 aria-hidden="true"
               />
-              যাচাইকৃত পেশাগত তথ্য
+              চিকিৎসকের পেশাগত পরিচিতি
             </div>
 
             <div>
@@ -181,50 +177,6 @@ export function HeroSection() {
               {doctor.designation}
             </p>
           </div>
-
-          {primaryChamber && (
-            <div className="absolute inset-x-0 bottom-0 ml-auto w-[94%] bg-clinical-ink p-5 text-white shadow-[var(--shadow-medium)] sm:p-6">
-              <div className="flex items-start justify-between gap-5">
-                <div>
-                  <p className="text-xs font-bold text-[#8FD8CF]">
-                    প্রধান চেম্বার
-                  </p>
-
-                  <h2 className="mt-1.5 text-lg font-bold text-white">
-                    {primaryChamber.name}
-                  </h2>
-                </div>
-
-                <Link
-                  href="/chambers"
-                  aria-label="চেম্বারের বিস্তারিত দেখুন"
-                  className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-                >
-                  <ArrowUpRight className="size-4.5" aria-hidden="true" />
-                </Link>
-              </div>
-
-              <div className="mt-5 grid gap-3 text-sm text-white/75 sm:grid-cols-2">
-                <div className="flex items-start gap-2">
-                  <CalendarDays
-                    className="mt-0.5 size-4 shrink-0 text-[#8FD8CF]"
-                    aria-hidden="true"
-                  />
-
-                  <span>{primaryChamber.visitingDays}</span>
-                </div>
-
-                <div className="flex items-start gap-2">
-                  <Clock3
-                    className="mt-0.5 size-4 shrink-0 text-[#8FD8CF]"
-                    aria-hidden="true"
-                  />
-
-                  <span>{primaryChamber.visitingHours}</span>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </Container>
     </section>
