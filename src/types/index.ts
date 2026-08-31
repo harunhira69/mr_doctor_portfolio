@@ -14,6 +14,14 @@ export type DoctorProfile = {
   email?: string;
 };
 
+export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+export type ChamberSchedule = {
+  days: Weekday[];
+  startTime: string;
+  endTime: string;
+};
+
 export type Chamber = {
   id: string;
   name: string;
@@ -22,6 +30,7 @@ export type Chamber = {
   visitingHours: string;
   appointmentNumber: string;
   mapUrl?: string;
+  schedule: ChamberSchedule;
 };
 
 export type Expertise = {

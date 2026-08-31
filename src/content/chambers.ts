@@ -2,19 +2,26 @@ import type { Chamber } from "@/types";
 
 /**
  * DEMO CONTENT
- * Production launch-এর আগে প্রকৃত chamber তথ্য দিয়ে replace করতে হবে।
+ * Production launch-এর আগে চিকিৎসকের verified chamber information
+ * এবং সময়সূচি দিয়ে replace করতে হবে।
  */
 
 export const chambers: Chamber[] = [
   {
     id: "dhanmondi-chamber",
-    name: "প্রাইমকেয়ার মেডিকেল সেন্টার",
+    name: "প্রাইমকেয়ার মেডিকেল সেন্টার",
     address: "ধানমন্ডি, ঢাকা-১২০৫",
     visitingDays: "শনিবার, সোমবার ও বুধবার",
     visitingHours: "বিকেল ৫টা থেকে রাত ৯টা",
     appointmentNumber: "01794908771",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=Dhanmondi+Dhaka",
+
+    schedule: {
+      days: [6, 1, 3],
+      startTime: "17:00",
+      endTime: "21:00",
+    },
   },
   {
     id: "uttara-chamber",
@@ -25,5 +32,11 @@ export const chambers: Chamber[] = [
     appointmentNumber: "01794908771",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=Uttara+Dhaka",
+
+    schedule: {
+      days: [0, 2],
+      startTime: "16:00",
+      endTime: "20:00",
+    },
   },
 ];
