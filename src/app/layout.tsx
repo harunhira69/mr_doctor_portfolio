@@ -88,13 +88,13 @@ export default function RootLayout({
   return (
     <html lang="bn">
       <body
-        className={`${banglaFont.variable} ${banglaFont.className} bg-white pb-20 text-[#0C2D35] antialiased md:pb-0`}
+        className={`${banglaFont.variable} ${banglaFont.className} bg-background pb-20 text-foreground antialiased md:pb-0`}
       >
         <PhysicianJsonLd />
 
         <a
           href="#main-content"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-[#0C2D35] px-5 py-3 font-bold text-white shadow-xl transition-transform focus-visible:translate-y-0 motion-reduce:transition-none"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-clinical-ink px-5 py-3 font-bold text-white shadow-xl transition-transform focus-visible:translate-y-0 motion-reduce:transition-none"
         >
           মূল কনটেন্টে যান
         </a>
