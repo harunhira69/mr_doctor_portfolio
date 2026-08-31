@@ -18,6 +18,14 @@ export const navigationItems: NavigationItem[] = [
     href: "/chambers",
   },
   {
+  label: "গ্যালারি",
+  href: "/gallery",
+},
+{
+  label: "স্বাস্থ্য গাইড",
+  href: "/health-guides",
+},
+  {
     label: "যোগাযোগ",
     href: "/contact",
   },

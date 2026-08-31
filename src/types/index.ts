@@ -6,12 +6,21 @@ export type DoctorProfile = {
   organization: string;
   yearsOfExperience: number;
   bmdcRegistration?: string;
+  demoBmdcRegistration?: string;
   professionalMemberships: string[];
   shortBio: string;
   profileImage: string;
   phone: string;
   whatsapp: string;
   email?: string;
+};
+
+export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+export type ChamberSchedule = {
+  days: Weekday[];
+  startTime: string;
+  endTime: string;
 };
 
 export type Chamber = {
@@ -22,6 +31,7 @@ export type Chamber = {
   visitingHours: string;
   appointmentNumber: string;
   mapUrl?: string;
+  schedule: ChamberSchedule;
 };
 
 export type Expertise = {

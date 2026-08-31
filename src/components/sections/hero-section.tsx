@@ -2,228 +2,181 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowUpRight,
-  CalendarDays,
-  Clock3,
   MapPin,
   MessageCircle,
+  ShieldCheck,
 } from "lucide-react";
 
 import { Container } from "@/components/shared/container";
-import { chambers } from "@/content/chambers";
 import { doctor } from "@/content/doctor";
 import { createGeneralWhatsAppUrl } from "@/lib/whatsapp";
 
 export function HeroSection() {
   const whatsappUrl = createGeneralWhatsAppUrl();
-  const primaryChamber = chambers[0];
 
   const experience = new Intl.NumberFormat("bn-BD").format(
     doctor.yearsOfExperience,
   );
 
+  const visibleDegrees = doctor.degrees.slice(0, 2).join(" • ");
+
   return (
-    <section
-      className="relative isolate overflow-hidden"
-      aria-labelledby="hero-heading"
-    >
+    <section className="relative isolate overflow-hidden border-b border-border bg-clinical-ivory">
       <div
-        className="absolute inset-0 -z-20 bg-[#F8FBFA]"
+        className="absolute inset-y-0 left-[56%] -z-10 hidden w-px bg-border/70 lg:block"
         aria-hidden="true"
       />
 
       <div
-        className="absolute -left-32 top-20 -z-10 size-80 rounded-full bg-[#DDF1EC]/70 blur-3xl"
+        className="absolute -left-40 top-20 -z-10 size-96 rounded-full bg-clinical-mint/80 blur-3xl"
         aria-hidden="true"
       />
 
       <div
-        className="absolute -right-32 bottom-0 -z-10 size-96 rounded-full bg-[#C79B4B]/10 blur-3xl"
+        className="absolute -right-40 bottom-0 -z-10 size-[28rem] rounded-full bg-clinical-gold/10 blur-3xl"
         aria-hidden="true"
       />
 
-      <Container className="grid min-h-svh items-center gap-14 pb-16 pt-28 sm:pt-32 lg:grid-cols-[1.05fr_0.95fr] lg:pb-20 lg:pt-28">
-        <div>
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#0E6B65]/15 bg-white/80 px-4 py-2 text-sm font-semibold text-[#0E6B65] shadow-sm backdrop-blur">
+      <Container className="grid items-center gap-14 py-14 lg:min-h-[calc(100svh-6.75rem)] lg:grid-cols-[1.02fr_0.98fr] lg:gap-20 lg:py-16">
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 text-sm font-bold text-clinical-teal">
             <span
-              className="size-2 rounded-full bg-[#0E6B65]"
+              className="h-px w-9 bg-clinical-gold"
               aria-hidden="true"
             />
 
-            আস্থার সঙ্গে, যত্নের সঙ্গে
+            ব্যক্তিকেন্দ্রিক চিকিৎসা ও দীর্ঘমেয়াদি যত্ন
           </div>
 
-          <h1
-            id="hero-heading"
-            className="max-w-3xl text-4xl font-bold leading-[1.18] tracking-[-0.03em] text-[#0C2D35] sm:text-5xl lg:text-6xl"
-          >
-            {doctor.fullName}
+          <h1 className="mt-7 max-w-3xl">
+            <span className="block text-[clamp(2.8rem,6vw,5.25rem)] font-bold leading-[1.02] tracking-[-0.045em] text-clinical-ink">
+              {doctor.fullName}
+            </span>
 
-            <span className="mt-3 block text-[#0E6B65]">
+            <span className="mt-5 block max-w-2xl text-[clamp(2rem,4vw,3.8rem)] font-semibold leading-[1.14] tracking-[-0.035em] text-clinical-teal">
               {doctor.specialty}
             </span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-base leading-8 text-[#496469] sm:text-lg">
+          <p className="mt-7 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
             {doctor.shortBio}
           </p>
+
+          <div className="mt-8 grid max-w-2xl gap-4 border-y border-border py-5 sm:grid-cols-2">
+            <div className="border-l-2 border-clinical-gold pl-4">
+              <p className="text-xs font-bold tracking-wide text-muted-foreground">
+                বর্তমান দায়িত্ব
+              </p>
+
+              <p className="mt-1.5 font-bold leading-6 text-clinical-ink">
+                {doctor.designation}
+              </p>
+            </div>
+
+            <div className="border-l-2 border-clinical-teal pl-4">
+              <p className="text-xs font-bold tracking-wide text-muted-foreground">
+                পেশাগত যোগ্যতা
+              </p>
+
+              <p className="mt-1.5 font-bold leading-6 text-clinical-ink">
+                {visibleDegrees}
+              </p>
+            </div>
+          </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-[#0E6B65] px-7 py-3 text-center font-semibold text-white shadow-[0_14px_35px_rgba(14,107,101,0.22)] transition hover:-translate-y-0.5 hover:bg-[#09534F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E6B65] focus-visible:ring-offset-2 motion-reduce:transform-none"
+              className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-clinical-teal px-7 font-bold text-white shadow-[0_16px_38px_rgb(13_118_110_/_20%)] transition hover:-translate-y-0.5 hover:bg-clinical-teal-dark"
             >
-              <MessageCircle
-                className="size-5 shrink-0"
-                aria-hidden="true"
-              />
-
+              <MessageCircle className="size-5" aria-hidden="true" />
               WhatsApp-এ অ্যাপয়েন্টমেন্ট
 
               <ArrowUpRight
-                className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none"
+                className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 aria-hidden="true"
               />
             </a>
 
             <Link
               href="/chambers"
-              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-[#0C2D35]/15 bg-white px-7 py-3 text-center font-semibold text-[#0C2D35] transition hover:border-[#0E6B65]/30 hover:bg-[#DDF1EC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E6B65] focus-visible:ring-offset-2"
+              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-border bg-white px-7 font-bold text-clinical-ink transition hover:border-clinical-teal hover:text-clinical-teal"
             >
-              <MapPin
-                className="size-5 shrink-0"
-                aria-hidden="true"
-              />
-
-              চেম্বারের তথ্য দেখুন
+              <MapPin className="size-5" aria-hidden="true" />
+              চেম্বারের তথ্য
             </Link>
           </div>
 
-          <div className="mt-10 grid max-w-xl grid-cols-3 gap-3 border-t border-[#0C2D35]/10 pt-7">
+          <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <ShieldCheck
+                className="size-4.5 text-clinical-teal"
+                aria-hidden="true"
+              />
+              চিকিৎসকের পেশাগত পরিচিতি
+            </div>
+
             <div>
-              <p className="text-2xl font-bold text-[#0C2D35]">
-                {experience}+
-              </p>
-
-              <p className="mt-1 text-xs leading-5 text-[#496469] sm:text-sm">
-                বছরের অভিজ্ঞতা
-              </p>
+              <strong className="text-clinical-ink">{experience}+</strong>{" "}
+              বছরের অভিজ্ঞতা
             </div>
 
-            <div className="border-l border-[#0C2D35]/10 pl-4">
-              <p className="text-2xl font-bold text-[#0C2D35]">
-                {doctor.degrees.length}
-              </p>
-
-              <p className="mt-1 text-xs leading-5 text-[#496469] sm:text-sm">
-                পেশাগত ডিগ্রি
-              </p>
-            </div>
-
-            <div className="border-l border-[#0C2D35]/10 pl-4">
-              <p className="text-2xl font-bold text-[#0C2D35]">
-                সরাসরি
-              </p>
-
-              <p className="mt-1 text-xs leading-5 text-[#496469] sm:text-sm">
-                WhatsApp যোগাযোগ
-              </p>
-            </div>
+            <div>সরাসরি WhatsApp যোগাযোগ</div>
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-xl">
-          <div className="relative min-h-[520px] overflow-hidden rounded-[2.25rem] border border-[#0C2D35]/10 bg-gradient-to-br from-[#DDF1EC] via-white to-[#F2E7D4] p-6 shadow-[0_35px_90px_rgba(12,45,53,0.14)] sm:min-h-[600px] sm:p-8">
-            <div
-              className="absolute -right-16 -top-16 size-52 rounded-full border-[32px] border-white/45"
-              aria-hidden="true"
-            />
+        <div className="relative mx-auto w-full max-w-[35rem] pb-20 pt-8 lg:pb-24">
+          <div
+            className="absolute bottom-28 right-0 top-0 w-[78%] bg-clinical-mint"
+            aria-hidden="true"
+          />
 
-            <div
-              className="absolute -bottom-24 -left-20 size-64 rounded-full bg-[#0E6B65]/10"
-              aria-hidden="true"
-            />
+          <div
+            className="absolute right-[78%] top-0 h-24 w-px bg-clinical-gold"
+            aria-hidden="true"
+          />
 
-            {doctor.designation && (
-              <div className="absolute left-6 top-6 z-10 rounded-full border border-white/70 bg-white/90 px-4 py-2 text-xs font-semibold text-[#0C2D35] shadow-sm backdrop-blur sm:left-8 sm:top-8">
-                {doctor.designation}
-              </div>
-            )}
-
-            <div className="absolute inset-x-6 bottom-32 top-20 overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/45 text-center backdrop-blur-sm sm:inset-x-8 sm:bottom-36">
-              <div className="relative h-full w-full">
-                <Image
-                  src={doctor.profileImage}
-                  alt={`${doctor.fullName} - ${doctor.specialty}`}
-                  fill
-                  sizes="(max-width: 1023px) 90vw, 45vw"
-                  className="object-cover"
-                  style={{
-                    objectPosition: "center 18%",
-                  }}
-                />
-              </div>
-            </div>
-
-            {primaryChamber && (
-              <div className="absolute inset-x-4 bottom-4 rounded-[1.5rem] border border-[#0C2D35]/10 bg-[#0C2D35] p-5 text-white shadow-2xl sm:inset-x-6 sm:bottom-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold text-[#8FD8CF]">
-                      প্রধান চেম্বার
-                    </p>
-
-                    <h2 className="mt-1 text-lg font-bold">
-                      {primaryChamber.name}
-                    </h2>
-                  </div>
-
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10">
-                    <MapPin
-                      className="size-5"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </div>
-
-                <div className="mt-4 grid gap-3 text-sm text-white/75 sm:grid-cols-2">
-                  <div className="flex items-center gap-2">
-                    <CalendarDays
-                      className="size-4 shrink-0 text-[#8FD8CF]"
-                      aria-hidden="true"
-                    />
-
-                    <span>{primaryChamber.visitingDays}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Clock3
-                      className="size-4 shrink-0 text-[#8FD8CF]"
-                      aria-hidden="true"
-                    />
-
-                    <span>{primaryChamber.visitingHours}</span>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div
+            className="absolute right-[calc(78%+0.65rem)] top-0 hidden text-xs font-bold tracking-[0.18em] text-clinical-gold [writing-mode:vertical-rl] sm:block"
+            aria-hidden="true"
+          >
+            পরিচিতি ০১
           </div>
 
-          {doctor.degrees.length > 0 && (
-            <div
-              className="absolute -left-4 top-1/3 hidden rounded-2xl border border-[#0C2D35]/10 bg-white p-4 shadow-xl xl:block"
-              aria-hidden="true"
-            >
-              <p className="text-xs font-semibold text-[#496469]">
-                পেশাগত যোগ্যতা
-              </p>
+          <figure className="relative ml-auto aspect-[4/5] w-[88%] overflow-hidden rounded-b-[2rem] rounded-t-[12rem] border border-white bg-[#EEE6D8] shadow-[var(--shadow-floating)]">
+            <Image
+              src={doctor.profileImage}
+              alt={`${doctor.fullName} — ${doctor.specialty}`}
+              fill
+              loading="eager"
+              fetchPriority="high"
+              quality={75}
+              sizes="(max-width: 1023px) 88vw, 44vw"
+              className="object-cover"
+              style={{ objectPosition: "center 18%" }}
+            />
 
-              <p className="mt-1 font-bold text-[#0C2D35]">
-                {doctor.degrees.join(" • ")}
-              </p>
-            </div>
-          )}
+            <div
+              className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-clinical-ink/35 to-transparent"
+              aria-hidden="true"
+            />
+
+            <figcaption className="sr-only">
+              {doctor.fullName}, {doctor.specialty}
+            </figcaption>
+          </figure>
+
+          <div className="absolute left-0 top-[30%] hidden max-w-56 border-l-4 border-clinical-gold bg-white px-5 py-4 shadow-[var(--shadow-medium)] sm:block">
+            <p className="text-xs font-bold text-muted-foreground">
+              চিকিৎসকের পরিচয়
+            </p>
+
+            <p className="mt-2 font-bold leading-6 text-clinical-ink">
+              {doctor.designation}
+            </p>
+          </div>
         </div>
       </Container>
     </section>

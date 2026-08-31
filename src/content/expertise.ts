@@ -44,7 +44,7 @@ export const expertise: Expertise[] = [
     title: "শ্বাসতন্ত্রের সমস্যা",
     description:
       "কাশি, শ্বাসকষ্ট এবং প্রাপ্তবয়স্কদের সাধারণ শ্বাসতন্ত্র-সংক্রান্ত সমস্যার প্রাথমিক মূল্যায়ন।",
-    icon: "lungs",
+    icon: "wind",
   },
   {
     id: "preventive-care",
