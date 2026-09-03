@@ -29,7 +29,9 @@ export const metadata: Metadata = {
   },
 
   description: siteConfig.description,
+
   applicationName: siteConfig.name,
+
   creator: doctor.fullName,
   publisher: doctor.fullName,
 
@@ -47,6 +49,17 @@ export const metadata: Metadata = {
 
     images: [
       {
+        /*
+          IMAGE PLACEHOLDER:
+          Doctor's professional portrait.
+
+          Recommended:
+          - vertical portrait
+          - approximately 4:5 ratio
+          - high resolution
+          - clean / professional background
+          - doctor's face clearly visible
+        */
         url: doctor.profileImage,
         width: 1200,
         height: 1500,
@@ -59,6 +72,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: defaultTitle,
     description: siteConfig.description,
+
     images: [doctor.profileImage],
   },
 
@@ -88,19 +102,28 @@ export default function RootLayout({
   return (
     <html lang="bn">
       <body
-        className={`${banglaFont.variable} ${banglaFont.className} bg-background pb-20 text-foreground antialiased md:pb-0`}
+        className={`${banglaFont.variable} ${banglaFont.className} min-h-screen bg-background pb-[5.25rem] text-foreground antialiased md:pb-0`}
       >
         <PhysicianJsonLd />
 
+        {/* -----------------------------------------------
+            ACCESSIBILITY
+        ------------------------------------------------ */}
         <a
           href="#main-content"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-clinical-ink px-5 py-3 font-bold text-white shadow-xl transition-transform focus-visible:translate-y-0 motion-reduce:transition-none"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-clinical-ink px-5 py-3 text-sm font-bold text-white shadow-xl transition-transform focus-visible:translate-y-0 motion-reduce:transition-none"
         >
           মূল কনটেন্টে যান
         </a>
 
+        {/* -----------------------------------------------
+            GLOBAL HEADER
+        ------------------------------------------------ */}
         <Header />
 
+        {/* -----------------------------------------------
+            MAIN CONTENT
+        ------------------------------------------------ */}
         <main
           id="main-content"
           tabIndex={-1}
@@ -109,7 +132,14 @@ export default function RootLayout({
           {children}
         </main>
 
+        {/* -----------------------------------------------
+            GLOBAL FOOTER
+        ------------------------------------------------ */}
         <Footer />
+
+        {/* -----------------------------------------------
+            MOBILE PRIMARY ACTION
+        ------------------------------------------------ */}
         <MobileActionBar />
       </body>
     </html>

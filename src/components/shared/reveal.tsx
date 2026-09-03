@@ -14,7 +14,7 @@ export function Reveal({
   children,
   className,
   delay = 0,
-  y = 24,
+  y = 20,
 }: RevealProps) {
   const prefersReducedMotion = useReducedMotion();
 
@@ -35,7 +35,7 @@ export function Reveal({
       }}
       viewport={{
         once: true,
-        amount: 0.15,
+        amount: 0.12,
       }}
       transition={
         prefersReducedMotion
@@ -43,7 +43,7 @@ export function Reveal({
               duration: 0,
             }
           : {
-              duration: 0.55,
+              duration: 0.65,
               delay,
               ease: [0.22, 1, 0.36, 1],
             }

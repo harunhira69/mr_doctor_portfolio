@@ -18,56 +18,79 @@ export function PageHero({
   currentPage,
 }: PageHeroProps) {
   return (
-    <section className="relative isolate overflow-hidden border-b border-[#0C2D35]/10 bg-[#F4FAF8] pb-20 pt-32 sm:pb-24 sm:pt-40">
+    <section className="relative isolate overflow-hidden border-b border-clinical-ink/10 bg-[#f3f7f3]">
+      {/* Decorative editorial field */}
       <div
-        className="absolute -right-24 top-10 -z-10 size-80 rounded-full bg-[#DDF1EC] blur-3xl"
+        className="pointer-events-none absolute -right-32 top-0 -z-10 size-[28rem] rounded-full bg-clinical-mint/70 blur-3xl"
         aria-hidden="true"
       />
 
       <div
-        className="absolute -left-24 bottom-0 -z-10 size-64 rounded-full bg-cyan-100/60 blur-3xl"
+        className="pointer-events-none absolute -left-40 bottom-[-10rem] -z-10 size-[24rem] rounded-full bg-[#efe6d6]/55 blur-3xl"
         aria-hidden="true"
       />
 
-      <Container>
+      <Container className="pb-16 pt-28 sm:pb-20 sm:pt-36 lg:pb-24">
         <Reveal>
           <nav aria-label="Breadcrumb">
-            <ol className="flex flex-wrap items-center gap-2 text-sm text-[#61777B]">
+            <ol className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <li>
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-1.5 transition hover:text-[#0E6B65]"
+                  className="inline-flex items-center gap-1.5 transition-colors hover:text-clinical-teal"
                 >
-                  <Home className="size-4" aria-hidden="true" />
-                  হোম
+                  <Home
+                    className="size-3.5"
+                    aria-hidden="true"
+                  />
+
+                  <span>হোম</span>
                 </Link>
               </li>
 
-              <li aria-hidden="true">
+              <li
+                aria-hidden="true"
+                className="text-clinical-ink/30"
+              >
                 <ChevronRight className="size-4" />
               </li>
 
               <li
-                className="font-semibold text-[#0E6B65]"
                 aria-current="page"
+                className="font-semibold text-clinical-ink"
               >
                 {currentPage}
               </li>
             </ol>
           </nav>
 
-          <div className="mt-8 max-w-3xl">
-            <p className="text-sm font-bold tracking-wide text-[#0E6B65]">
-              {eyebrow}
-            </p>
+          <div className="mt-10 max-w-4xl">
+            <div className="flex items-center gap-3">
+              <span
+                className="h-px w-9 bg-clinical-gold"
+                aria-hidden="true"
+              />
 
-            <h1 className="mt-4 text-4xl font-bold leading-tight tracking-[-0.03em] text-[#0C2D35] sm:text-5xl lg:text-6xl">
+              <p className="editorial-eyebrow text-clinical-teal">
+                {eyebrow}
+              </p>
+            </div>
+
+            <h1 className="editorial-title mt-5 max-w-4xl text-[clamp(2.5rem,6vw,5.8rem)] font-bold leading-[1.04] text-clinical-ink">
               {title}
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-[#61777B] sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
               {description}
             </p>
+          </div>
+
+          <div className="mt-10 flex items-center gap-4">
+            <span className="h-px w-16 bg-clinical-ink/15" />
+
+            <span className="text-xs font-semibold tracking-[0.14em] text-clinical-ink/45">
+              MR DOCTOR
+            </span>
           </div>
         </Reveal>
       </Container>

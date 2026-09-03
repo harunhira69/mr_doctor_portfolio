@@ -1,126 +1,170 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
 import {
-  Activity,
   ArrowRight,
-  BookOpen,
-  CheckCircle2,
   ClipboardList,
-  Droplets,
+  FileSearch,
   HeartPulse,
-  MessageCircle,
-  Scale,
-  ShieldAlert,
+  MessageCircleQuestion,
+  RefreshCw,
   Stethoscope,
-  Thermometer,
 } from "lucide-react";
+import { useState } from "react";
 
 import { Container } from "@/components/shared/container";
-import {
-  patientConcerns,
-  type PatientConcern,
-  type PatientConcernId,
-} from "@/content/patient-concerns";
-import { doctor } from "@/content/doctor";
+import { Reveal } from "@/components/shared/reveal";
 
-const concernIcons: Record<PatientConcernId, LucideIcon> = {
-  diabetes: Droplets,
-  "blood-pressure": HeartPulse,
-  fever: Thermometer,
-  digestive: Activity,
-  fatigue: Scale,
-  "general-medicine": Stethoscope,
+type Concern = {
+  id: string;
+  number: string;
+  title: string;
+  description: string;
+  icon: typeof Stethoscope;
+  href: string;
 };
 
-function createConcernWhatsAppUrl(concern: PatientConcern) {
-  const message = [
-    "আসসালামু আলাইকুম,",
-    `আমি ${doctor.fullName}-এর কাছে অ্যাপয়েন্টমেন্ট নিতে চাই।`,
-    `পরামর্শের বিষয়: ${concern.title}`,
-    "",
-    "রোগীর নাম:",
-    "বয়স:",
-    "প্রধান স্বাস্থ্যসমস্যা:",
-    "সমস্যা কতদিন ধরে:",
-    "সম্ভাব্য তারিখ:",
-  ].join("\n");
-
-  return `https://wa.me/${doctor.whatsapp}?text=${encodeURIComponent(
-    message,
-  )}`;
-}
+const concerns: Concern[] = [
+  {
+    id: "new-problem",
+    number: "01",
+    title: "নতুন কোনো সমস্যা নিয়ে পরামর্শ চাই",
+    description:
+      "নতুন বা বারবার হওয়া কোনো উপসর্গ নিয়ে কোথা থেকে শুরু করবেন বুঝতে না পারলে এখানে শুরু করুন।",
+    icon: Stethoscope,
+    href: "/expertise",
+  },
+  {
+    id: "diabetes",
+    number: "02",
+    title: "ডায়াবেটিস / সুগার নিয়ে পরামর্শ চাই",
+    description:
+      "রক্তে শর্করা নিয়ন্ত্রণ, নিয়মিত ফলো-আপ বা চিকিৎসা পরিকল্পনা নিয়ে আলোচনা করতে পারেন।",
+    icon: HeartPulse,
+    href: "/expertise",
+  },
+  {
+    id: "blood-pressure",
+    number: "03",
+    title: "রক্তচাপ বা দীর্ঘদিনের সমস্যা",
+    description:
+      "উচ্চ রক্তচাপসহ দীর্ঘমেয়াদি স্বাস্থ্যসমস্যার নিয়মিত মূল্যায়ন ও ব্যবস্থাপনা প্রয়োজন হলে।",
+    icon: RefreshCw,
+    href: "/expertise",
+  },
+  {
+    id: "reports",
+    number: "04",
+    title: "রিপোর্ট বা টেস্ট বুঝতে চাই",
+    description:
+      "কোনো পরীক্ষার রিপোর্টের অর্থ ও পরবর্তী পদক্ষেপ নিয়ে চিকিৎসকের সঙ্গে আলোচনা করতে চাইলে।",
+    icon: FileSearch,
+    href: "/contact",
+  },
+  {
+    id: "follow-up",
+    number: "05",
+    title: "আগের চিকিৎসার follow-up",
+    description:
+      "চলমান চিকিৎসার অগ্রগতি, ওষুধ বা পরবর্তী মূল্যায়ন নিয়ে আবার পরামর্শ প্রয়োজন হলে।",
+    icon: ClipboardList,
+    href: "/contact",
+  },
+  {
+    id: "second-opinion",
+    number: "06",
+    title: "Second opinion নিতে চাই",
+    description:
+      "আগের পরামর্শ বা চিকিৎসা পরিকল্পনা সম্পর্কে আরেকটি চিকিৎসাগত মতামত প্রয়োজন হলে।",
+    icon: MessageCircleQuestion,
+    href: "/contact",
+  },
+];
 
 export function ConcernNavigatorSection() {
-  const [activeConcernId, setActiveConcernId] =
-    useState<PatientConcernId>(patientConcerns[0].id);
-
-  const activeConcern =
-    patientConcerns.find(
-      (concern) => concern.id === activeConcernId,
-    ) ?? patientConcerns[0];
+  const [activeConcern, setActiveConcern] = useState<string | null>(
+    null,
+  );
 
   return (
     <section
-      id="concern-navigator"
-      aria-labelledby="concern-navigator-heading"
-      className="bg-clinical-ivory py-16 sm:py-20 lg:py-28"
+      id="concerns"
+      aria-labelledby="concerns-heading"
+      className="section-space bg-clinical-ivory"
     >
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
-          <div>
-            <div className="flex items-center gap-3 text-sm font-bold text-clinical-teal">
-              <span
-                className="h-px w-9 bg-clinical-gold"
-                aria-hidden="true"
-              />
-              পরামর্শের বিষয় নির্বাচন
-            </div>
-
-            <h2
-              id="concern-navigator-heading"
-              className="mt-5 max-w-xl text-3xl font-bold leading-tight tracking-[-0.03em] text-clinical-ink sm:text-4xl lg:text-5xl"
-            >
-              কোন সমস্যায় পরামর্শ চান?
-            </h2>
-
-            <p className="mt-5 max-w-xl leading-8 text-muted-foreground">
-              আপনার প্রধান উদ্বেগ নির্বাচন করলে appointment-এর আগে
-              প্রয়োজনীয় প্রস্তুতি ও relevant health guide দেখতে
-              পারবেন।
+        {/* Introduction */}
+        <div className="grid gap-8 lg:grid-cols-[0.55fr_1.45fr] lg:items-end lg:gap-16">
+          <Reveal>
+            <p className="editorial-eyebrow text-clinical-teal">
+              Start Here
             </p>
+          </Reveal>
 
-            <div
-              className="mt-8 grid grid-cols-2 gap-3"
-              aria-label="স্বাস্থ্যসমস্যা নির্বাচন করুন"
-            >
-              {patientConcerns.map((concern) => {
-                const Icon = concernIcons[concern.id];
-                const isActive =
-                  concern.id === activeConcern.id;
+          <Reveal delay={0.06}>
+            <div>
+              <h2
+                id="concerns-heading"
+                className="editorial-title max-w-4xl text-clinical-ink"
+              >
+                কী কারণে
+                <span className="text-clinical-teal">
+                  {" "}
+                  এসেছেন?
+                </span>
+              </h2>
 
-                return (
-                  <button
-                    key={concern.id}
-                    type="button"
-                    aria-pressed={isActive}
-                    onClick={() =>
-                      setActiveConcernId(concern.id)
-                    }
-                    className={`group flex min-h-28 flex-col items-start justify-between rounded-2xl border p-4 text-left transition ${
-                      isActive
-                        ? "border-clinical-teal bg-clinical-teal text-white shadow-[0_16px_35px_rgb(13_118_110_/_18%)]"
-                        : "border-border bg-white text-clinical-ink hover:-translate-y-0.5 hover:border-clinical-teal/40"
-                    }`}
+              <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+                সঠিক জায়গা খুঁজে পেতে পুরো ওয়েবসাইট ঘাঁটতে হবে না।
+                আপনার প্রয়োজনের কাছাকাছি বিষয়টি বেছে নিন—তারপর
+                প্রাসঙ্গিক তথ্য দেখুন।
+              </p>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Navigator */}
+        <div className="mt-12 border-t border-clinical-ink/10">
+          {concerns.map((concern, index) => {
+            const Icon = concern.icon;
+            const isActive = activeConcern === concern.id;
+
+            return (
+              <Reveal
+                key={concern.id}
+                delay={index * 0.04}
+              >
+                <div
+                  className={[
+                    "group border-b border-clinical-ink/10 transition-colors duration-300",
+                    isActive
+                      ? "bg-white"
+                      : "hover:bg-white/60",
+                  ].join(" ")}
+                  onMouseEnter={() =>
+                    setActiveConcern(concern.id)
+                  }
+                  onMouseLeave={() =>
+                    setActiveConcern(null)
+                  }
+                >
+                  <Link
+                    href={concern.href}
+                    className="grid gap-5 px-0 py-6 sm:grid-cols-[64px_56px_1fr_auto] sm:items-center sm:gap-7 sm:py-7"
                   >
+                    {/* Number */}
+                    <span className="hidden text-xs font-bold tabular-nums text-clinical-gold sm:block">
+                      {concern.number}
+                    </span>
+
+                    {/* Icon */}
                     <span
-                      className={`flex size-10 items-center justify-center rounded-xl ${
+                      className={[
+                        "flex size-12 items-center justify-center rounded-full border transition-all duration-300",
                         isActive
-                          ? "bg-white/15 text-white"
-                          : "bg-clinical-mint text-clinical-teal"
-                      }`}
+                          ? "border-clinical-teal bg-clinical-teal text-white"
+                          : "border-clinical-ink/10 bg-white text-clinical-teal",
+                      ].join(" ")}
                     >
                       <Icon
                         className="size-5"
@@ -128,170 +172,59 @@ export function ConcernNavigatorSection() {
                       />
                     </span>
 
-                    <span className="mt-4 font-bold leading-6">
-                      {concern.shortLabel}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+                    {/* Content */}
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold tabular-nums text-clinical-gold sm:hidden">
+                          {concern.number}
+                        </span>
 
-          <div>
-            <div
-              aria-live="polite"
-              className="overflow-hidden rounded-[2rem] border border-border bg-white shadow-[var(--shadow-soft)]"
-            >
-              <div className="border-b border-border bg-clinical-ink p-6 text-white sm:p-8">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#9EDDD4]">
-                  নির্বাচিত পরামর্শ
-                </p>
+                        <h3 className="text-lg font-bold tracking-[-0.015em] text-clinical-ink sm:text-xl">
+                          {concern.title}
+                        </h3>
+                      </div>
 
-                <h3 className="mt-3 text-2xl font-bold leading-tight sm:text-3xl">
-                  {activeConcern.title}
-                </h3>
+                      <p className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
+                        {concern.description}
+                      </p>
+                    </div>
 
-                <p className="mt-4 leading-8 text-white/70">
-                  {activeConcern.description}
-                </p>
-              </div>
-
-              <div className="grid gap-8 p-6 sm:p-8 xl:grid-cols-2">
-                <div>
-                  <div className="flex items-center gap-3">
-                    <span className="flex size-10 items-center justify-center rounded-xl bg-clinical-mint text-clinical-teal">
-                      <CheckCircle2
-                        className="size-5"
-                        aria-hidden="true"
-                      />
-                    </span>
-
-                    <h4 className="font-bold text-clinical-ink">
-                      Appointment নিতে পারেন
-                    </h4>
-                  </div>
-
-                  <ul className="mt-5 space-y-3">
-                    {activeConcern.appointmentReasons.map(
-                      (reason) => (
-                        <li
-                          key={reason}
-                          className="flex gap-3 text-sm leading-7 text-muted-foreground"
-                        >
-                          <span
-                            className="mt-2.5 size-1.5 shrink-0 rounded-full bg-clinical-teal"
-                            aria-hidden="true"
-                          />
-                          {reason}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-
-                <div>
-                  <div className="flex items-center gap-3">
-                    <span className="flex size-10 items-center justify-center rounded-xl bg-[#F4E8D5] text-clinical-gold">
-                      <ClipboardList
-                        className="size-5"
-                        aria-hidden="true"
-                      />
-                    </span>
-
-                    <h4 className="font-bold text-clinical-ink">
-                      সঙ্গে যা আনবেন
-                    </h4>
-                  </div>
-
-                  <ul className="mt-5 space-y-3">
-                    {activeConcern.preparation.map((item) => (
-                      <li
-                        key={item}
-                        className="flex gap-3 text-sm leading-7 text-muted-foreground"
-                      >
-                        <span
-                          className="mt-2.5 size-1.5 shrink-0 rounded-full bg-clinical-gold"
-                          aria-hidden="true"
-                        />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="border-t border-border bg-clinical-surface p-6 sm:p-8">
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <a
-                    href={createConcernWhatsAppUrl(activeConcern)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-clinical-teal px-5 font-bold text-white transition hover:bg-clinical-teal-dark"
-                  >
-                    <MessageCircle
-                      className="size-5"
+                    {/* Arrow */}
+                    <span
+                      className={[
+                        "flex size-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300",
+                        isActive
+                          ? "translate-x-1 border-clinical-teal bg-clinical-teal text-white"
+                          : "border-clinical-ink/10 text-clinical-ink/50",
+                      ].join(" ")}
                       aria-hidden="true"
-                    />
-                    এই বিষয়ে appointment
-                  </a>
-
-                  <Link
-                    href={activeConcern.guideHref}
-                    className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border border-border bg-white px-5 font-bold text-clinical-ink transition hover:border-clinical-teal hover:text-clinical-teal"
-                  >
-                    <BookOpen
-                      className="size-5"
-                      aria-hidden="true"
-                    />
-                    স্বাস্থ্য গাইড পড়ুন
-                    <ArrowRight
-                      className="size-4"
-                      aria-hidden="true"
-                    />
+                    >
+                      <ArrowRight className="size-4" />
+                    </span>
                   </Link>
                 </div>
-              </div>
-            </div>
-
-            <div className="mt-5 rounded-2xl border border-clinical-critical/20 bg-clinical-critical/5 p-5">
-              <div className="flex items-start gap-4">
-                <ShieldAlert
-                  className="mt-0.5 size-6 shrink-0 text-clinical-critical"
-                  aria-hidden="true"
-                />
-
-                <div>
-                  <h3 className="font-bold text-[#7F1D1D]">
-                    জরুরি লক্ষণ হলে appointment-এর জন্য অপেক্ষা করবেন না
-                  </h3>
-
-                  <p className="mt-2 text-sm leading-7 text-[#7F1D1D]/80">
-                    তীব্র বা চাপধরা বুকব্যথা, গুরুতর শ্বাসকষ্ট,
-                    অচেতন হয়ে যাওয়া অথবা জীবন-ঝুঁকিপূর্ণ পরিস্থিতিতে
-                    নিকটস্থ হাসপাতালের জরুরি বিভাগে যান।
-                  </p>
-
-                  <a
-                    href="tel:333"
-                    className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-clinical-critical px-5 font-bold text-white transition hover:bg-[#8F2E2E]"
-                  >
-                    <ShieldAlert
-                      className="size-4"
-                      aria-hidden="true"
-                    />
-                    জাতীয় জরুরি সেবা 333
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <p className="mt-4 text-xs leading-6 text-muted-foreground">
-              এটি কোনো symptom checker, diagnosis অথবা prescription
-              service নয়। প্রকাশের আগে সব medical content নিবন্ধিত
-              চিকিৎসকের মাধ্যমে review করাতে হবে।
-            </p>
-          </div>
+              </Reveal>
+            );
+          })}
         </div>
+
+        {/* Bottom note */}
+        <Reveal delay={0.18}>
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-xl text-sm leading-7 text-muted-foreground">
+              আপনার সমস্যাটি এখানে না থাকলেও সাধারণ মেডিসিন
+              সংক্রান্ত পরামর্শের জন্য যোগাযোগ করতে পারেন।
+            </p>
+
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 text-sm font-bold text-clinical-teal transition-colors hover:text-clinical-teal-dark"
+            >
+              সরাসরি যোগাযোগ করুন
+              <ArrowRight className="size-4" />
+            </Link>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );
