@@ -5,7 +5,9 @@ import Link from "next/link";
 import {
   ArrowRight,
   CalendarDays,
+  CheckCircle2,
   Clock3,
+  ExternalLink,
   MapPin,
   MessageCircle,
 } from "lucide-react";
@@ -95,33 +97,21 @@ function getChamberAvailability(
   if (currentMinutes < startTime) {
     return {
       kind: "upcoming",
-      label: "আজকের চেম্বার শুরু হবে",
+      label: "আজকের চেম্বার সামনে",
     };
   }
 
   if (currentMinutes < endTime) {
     return {
       kind: "open",
-      label: "সময়সূচি অনুযায়ী এখন চলছে",
+      label: "সময়সূচি অনুযায়ী চলছে",
     };
   }
 
   return {
     kind: "finished",
-    label: "আজকের নির্ধারিত সময় শেষ",
+    label: "আজকের সময় শেষ",
   };
-}
-
-function getStatusClass(kind: ChamberAvailability["kind"]) {
-  if (kind === "open") {
-    return "bg-emerald-100 text-emerald-900";
-  }
-
-  if (kind === "upcoming") {
-    return "bg-amber-100 text-amber-900";
-  }
-
-  return "bg-slate-100 text-slate-700";
 }
 
 function createChamberWhatsAppUrl(chamber: Chamber) {
@@ -142,118 +132,129 @@ function createChamberWhatsAppUrl(chamber: Chamber) {
   )}`;
 }
 
-function TodayChamberCard({
-  chamber,
-  currentMinutes,
+function AvailabilityBadge({
+  availability,
 }: {
-  chamber: Chamber;
-  currentMinutes: number;
+  availability: ChamberAvailability;
 }) {
-  const availability = getChamberAvailability(
-    chamber,
-    currentMinutes,
-  );
+  const isOpen = availability.kind === "open";
+  const isUpcoming = availability.kind === "upcoming";
 
   return (
-    <article className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white text-clinical-ink shadow-[0_28px_70px_rgb(0_0_0_/_18%)]">
-      <div className="border-b border-border bg-clinical-ivory px-6 py-5 sm:px-7">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-clinical-teal">
-            আজকের চেম্বার
-          </p>
+    <span
+      className={`inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-semibold ${
+        isOpen
+          ? "bg-emerald-100 text-emerald-900"
+          : isUpcoming
+            ? "bg-amber-100 text-amber-900"
+            : "bg-slate-100 text-slate-700"
+      }`}
+    >
+      <span
+        className="size-1.5 rounded-full bg-current"
+        aria-hidden="true"
+      />
 
-          <span
-            className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${getStatusClass(
-              availability.kind,
-            )}`}
-          >
-            <span
-              className="size-2 rounded-full bg-current"
-              aria-hidden="true"
-            />
-            {availability.label}
-          </span>
+      {availability.label}
+    </span>
+  );
+}
+
+function ChamberCard({
+  chamber,
+  currentMinutes,
+  isToday,
+}: {
+  chamber: Chamber;
+  currentMinutes: number | null;
+  isToday: boolean;
+}) {
+  const availability =
+    isToday && currentMinutes !== null
+      ? getChamberAvailability(chamber, currentMinutes)
+      : null;
+
+  return (
+    <article className="group relative overflow-hidden rounded-[1.35rem] border border-clinical-ink/10 bg-white transition duration-300 hover:-translate-y-1 hover:border-clinical-teal/30 hover:shadow-[0_24px_60px_rgb(20_50_48_/_10%)]">
+      <div className="border-b border-border/70 px-6 py-5 sm:px-7">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-clinical-teal">
+            <MapPin className="size-4" aria-hidden="true" />
+
+            {isToday ? "আজকের চেম্বার" : "চেম্বার"}
+          </div>
+
+          {availability && (
+            <AvailabilityBadge availability={availability} />
+          )}
         </div>
       </div>
 
       <div className="p-6 sm:p-7">
-        <div className="flex items-start gap-4">
-          <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-clinical-mint text-clinical-teal">
-            <MapPin className="size-6" aria-hidden="true" />
-          </span>
+        <h3 className="max-w-md text-2xl font-semibold tracking-tight text-clinical-ink sm:text-[1.7rem]">
+          {chamber.name}
+        </h3>
 
-          <div>
-            <h3 className="text-xl font-bold sm:text-2xl">
-              {chamber.name}
-            </h3>
+        <p className="mt-2 text-sm leading-7 text-muted-foreground">
+          {chamber.address}
+        </p>
 
-            <p className="mt-2 text-sm leading-7 text-muted-foreground">
-              {chamber.address}
-            </p>
-          </div>
-        </div>
-
-        <dl className="mt-6 grid gap-4 border-y border-border py-5 sm:grid-cols-2">
-          <div className="flex items-start gap-3">
+        <div className="mt-7 grid gap-4 border-y border-border/70 py-5 sm:grid-cols-2">
+          <div className="flex gap-3">
             <CalendarDays
               className="mt-0.5 size-5 shrink-0 text-clinical-teal"
               aria-hidden="true"
             />
 
             <div>
-              <dt className="text-xs font-semibold text-muted-foreground">
+              <p className="text-xs font-medium text-muted-foreground">
                 রোগী দেখার দিন
-              </dt>
-              <dd className="mt-1 font-bold text-clinical-ink">
+              </p>
+
+              <p className="mt-1 text-sm font-semibold leading-6 text-clinical-ink">
                 {chamber.visitingDays}
-              </dd>
+              </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3">
+          <div className="flex gap-3">
             <Clock3
               className="mt-0.5 size-5 shrink-0 text-clinical-teal"
               aria-hidden="true"
             />
 
             <div>
-              <dt className="text-xs font-semibold text-muted-foreground">
+              <p className="text-xs font-medium text-muted-foreground">
                 নির্ধারিত সময়
-              </dt>
-              <dd className="mt-1 font-bold text-clinical-ink">
+              </p>
+
+              <p className="mt-1 text-sm font-semibold leading-6 text-clinical-ink">
                 {chamber.visitingHours}
-              </dd>
+              </p>
             </div>
           </div>
-        </dl>
+        </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div className="mt-6 flex flex-wrap gap-3">
           <a
             href={createChamberWhatsAppUrl(chamber)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-clinical-teal px-5 text-sm font-bold text-white transition hover:bg-clinical-teal-dark"
+            className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full bg-clinical-teal px-5 text-sm font-semibold text-white transition hover:bg-clinical-teal-dark sm:flex-none"
           >
-            <MessageCircle className="size-5" aria-hidden="true" />
-            অ্যাপয়েন্টমেন্ট নিন
+            <MessageCircle className="size-4" aria-hidden="true" />
+            অ্যাপয়েন্টমেন্ট
           </a>
 
-          {chamber.mapUrl ? (
+          {chamber.mapUrl && (
             <a
               href={chamber.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-border bg-white px-5 text-sm font-bold text-clinical-ink transition hover:border-clinical-teal hover:text-clinical-teal"
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full border border-border px-5 text-sm font-semibold text-clinical-ink transition hover:border-clinical-teal hover:text-clinical-teal sm:flex-none"
             >
-              <MapPin className="size-5" aria-hidden="true" />
-              ম্যাপে দেখুন
-            </a>
-          ) : (
-            <a
-              href={`tel:${chamber.appointmentNumber}`}
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-border bg-white px-5 text-sm font-bold text-clinical-ink transition hover:border-clinical-teal hover:text-clinical-teal"
-            >
-              কল করুন
+              <ExternalLink className="size-4" aria-hidden="true" />
+              ম্যাপ
             </a>
           )}
         </div>
@@ -270,9 +271,7 @@ export function TodayChamberSection() {
   );
 
   const currentDate =
-    minuteTick === 0
-      ? null
-      : new Date(minuteTick * 60_000);
+    minuteTick === 0 ? null : new Date(minuteTick * 60_000);
 
   const bangladeshClock = currentDate
     ? getBangladeshClock(currentDate)
@@ -280,11 +279,16 @@ export function TodayChamberSection() {
 
   const todayChambers = bangladeshClock
     ? chambers.filter((chamber) =>
-        chamber.schedule.days.includes(
-          bangladeshClock.weekday,
-        ),
+        chamber.schedule.days.includes(bangladeshClock.weekday),
       )
     : [];
+
+  const otherChambers = bangladeshClock
+    ? chambers.filter(
+        (chamber) =>
+          !chamber.schedule.days.includes(bangladeshClock.weekday),
+      )
+    : chambers;
 
   const formattedDate = currentDate
     ? new Intl.DateTimeFormat("bn-BD", {
@@ -299,127 +303,145 @@ export function TodayChamberSection() {
     <section
       id="today-chamber"
       aria-labelledby="today-chamber-heading"
-      className="relative isolate overflow-hidden bg-clinical-ink py-16 text-white sm:py-20 lg:py-24"
+      className="section-space overflow-hidden bg-clinical-ivory"
     >
-      <div
-        className="absolute -left-32 top-1/2 -z-10 size-96 -translate-y-1/2 rounded-full bg-clinical-teal/25 blur-3xl"
-        aria-hidden="true"
-      />
-
-      <div
-        className="absolute -right-32 -top-32 -z-10 size-96 rounded-full bg-clinical-gold/15 blur-3xl"
-        aria-hidden="true"
-      />
-
       <Container>
-        <div className="grid items-start gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-14">
+        {/* Header */}
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
-            <div className="flex items-center gap-3 text-sm font-bold text-[#9EDDD4]">
-              <span
-                className="h-px w-9 bg-clinical-gold"
-                aria-hidden="true"
-              />
-              ডিজিটাল চেম্বার
+            <div className="editorial-eyebrow">
+              <span>WHERE & WHEN TO SEE THE DOCTOR</span>
             </div>
 
             <h2
               id="today-chamber-heading"
-              className="mt-5 text-3xl font-bold leading-tight tracking-[-0.03em] text-white sm:text-4xl lg:text-5xl"
+              className="editorial-title mt-5 max-w-xl"
             >
-              আজ কোথায় রোগী দেখবেন?
+              কোথায় এবং কখন
+              <br />
+              <span className="text-clinical-teal">
+                দেখা করবেন?
+              </span>
             </h2>
-
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/70">
-              দিনের নাম ও বাংলাদেশ সময় অনুযায়ী আজকের নির্ধারিত
-              চেম্বারের তথ্য এখানে স্বয়ংক্রিয়ভাবে দেখানো হচ্ছে।
-            </p>
-
-            <div className="mt-7 inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white/90">
-              <CalendarDays
-                className="size-4 text-[#9EDDD4]"
-                aria-hidden="true"
-              />
-              {formattedDate}
-            </div>
-
-            <Link
-              href="/chambers"
-              className="mt-8 flex w-fit items-center gap-2 font-bold text-[#9EDDD4] transition hover:text-white"
-            >
-              সম্পূর্ণ সময়সূচি দেখুন
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
-
-            <p className="mt-8 border-l-2 border-clinical-gold pl-4 text-xs leading-6 text-white/55">
-             চেম্বারের সময়সূচি পরিবর্তিত হতে পারে। যাওয়ার আগে ফোন অথবা WhatsApp-এর মাধ্যমে সময় নিশ্চিত করে নিন।
-            </p>
           </div>
 
-          <div aria-live="polite">
-            {!bangladeshClock ? (
-              <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-8">
-                <div className="h-5 w-32 animate-pulse rounded-full bg-white/10" />
-                <div className="mt-5 h-8 w-3/4 animate-pulse rounded-lg bg-white/10" />
-                <div className="mt-4 h-5 w-1/2 animate-pulse rounded-lg bg-white/10" />
+          <div className="lg:justify-self-end lg:max-w-xl">
+            <p className="text-base leading-8 text-muted-foreground sm:text-lg">
+              আপনার সুবিধামতো চেম্বার বেছে নেওয়ার জন্য প্রয়োজনীয়
+              ঠিকানা, দিন ও সময় এক জায়গায় দেখুন। যাওয়ার আগে ফোন অথবা
+              WhatsApp-এর মাধ্যমে সময় নিশ্চিত করে নেওয়া ভালো।
+            </p>
+
+            <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-clinical-ink">
+              <CalendarDays
+                className="size-4 text-clinical-teal"
+                aria-hidden="true"
+              />
+
+              {formattedDate}
+            </div>
+          </div>
+        </div>
+
+        {/* Today */}
+        <div className="mt-12">
+          {todayChambers.length > 0 ? (
+            <>
+              <div className="mb-5 flex items-center gap-3">
+                <CheckCircle2
+                  className="size-5 text-clinical-teal"
+                  aria-hidden="true"
+                />
+
+                <p className="text-sm font-semibold text-clinical-ink">
+                  আজকের নির্ধারিত চেম্বার
+                </p>
               </div>
-            ) : todayChambers.length > 0 ? (
-              <div className="grid gap-5">
+
+              <div className="grid gap-5 lg:grid-cols-2">
                 {todayChambers.map((chamber) => (
-                  <TodayChamberCard
+                  <ChamberCard
                     key={chamber.id}
                     chamber={chamber}
                     currentMinutes={
-                      bangladeshClock.currentMinutes
+                      bangladeshClock?.currentMinutes ?? null
                     }
+                    isToday
                   />
                 ))}
               </div>
-            ) : (
-              <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-7 backdrop-blur-sm sm:p-9">
-                <span className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-[#9EDDD4]">
-                  <CalendarDays
-                    className="size-7"
-                    aria-hidden="true"
-                  />
-                </span>
+            </>
+          ) : (
+            <div className="rounded-[1.35rem] border border-clinical-ink/10 bg-white p-7 sm:p-9">
+              <div className="flex size-12 items-center justify-center rounded-full bg-clinical-mint text-clinical-teal">
+                <CalendarDays
+                  className="size-5"
+                  aria-hidden="true"
+                />
+              </div>
 
-                <h3 className="mt-6 text-2xl font-bold text-white">
-                  আজ কোনো নিয়মিত চেম্বার নেই
-                </h3>
+              <h3 className="mt-5 text-2xl font-semibold tracking-tight text-clinical-ink">
+                আজ নিয়মিত চেম্বার নেই
+              </h3>
 
-                <p className="mt-3 max-w-xl leading-8 text-white/65">
-                  পরবর্তী চেম্বারের সময় জানতে সম্পূর্ণ সময়সূচি দেখুন
-                  অথবা WhatsApp-এর মাধ্যমে যোগাযোগ করুন।
+              <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground sm:text-base">
+                নিচের নিয়মিত চেম্বারগুলোর সময়সূচি দেখে আপনার
+                সুবিধামতো দিন বেছে নিতে পারেন।
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Other chambers */}
+        {otherChambers.length > 0 && (
+          <div className="mt-14">
+            <div className="mb-5 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold text-clinical-ink">
+                  অন্যান্য নিয়মিত চেম্বার
                 </p>
 
-                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href="/chambers"
-                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-5 font-bold text-clinical-ink transition hover:bg-clinical-mint"
-                  >
-                    সময়সূচি দেখুন
-                    <ArrowRight
-                      className="size-4"
-                      aria-hidden="true"
-                    />
-                  </Link>
-
-                  <a
-                    href={`https://wa.me/${doctor.whatsapp}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-5 font-bold text-white transition hover:bg-white/10"
-                  >
-                    <MessageCircle
-                      className="size-5"
-                      aria-hidden="true"
-                    />
-                    WhatsApp করুন
-                  </a>
-                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  নিয়মিত সময়সূচি
+                </p>
               </div>
-            )}
+
+              <Link
+                href="/chambers"
+                className="hidden items-center gap-2 text-sm font-semibold text-clinical-teal transition hover:text-clinical-ink sm:flex"
+              >
+                সম্পূর্ণ সময়সূচি
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+            </div>
+
+            <div className="grid gap-5 lg:grid-cols-2">
+              {otherChambers.map((chamber) => (
+                <ChamberCard
+                  key={chamber.id}
+                  chamber={chamber}
+                  currentMinutes={null}
+                  isToday={false}
+                />
+              ))}
+            </div>
           </div>
+        )}
+
+        {/* Bottom note */}
+        <div className="mt-10 flex flex-col gap-5 border-t border-clinical-ink/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-2xl border-l-2 border-clinical-gold pl-4 text-xs leading-6 text-muted-foreground">
+            চেম্বারের সময়সূচি পরিবর্তিত হতে পারে। যাওয়ার আগে
+            ফোন অথবা WhatsApp-এর মাধ্যমে সময় নিশ্চিত করে নিন।
+          </p>
+
+          <Link
+            href="/chambers"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-clinical-ink transition hover:text-clinical-teal"
+          >
+            সব চেম্বার দেখুন
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
         </div>
       </Container>
     </section>
